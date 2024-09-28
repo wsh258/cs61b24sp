@@ -48,6 +48,7 @@ public class BeeCountingStage implements AdventureStage {
                     System.out.println("Please enter a valid integer.");
                     input = this.in.readLine();
                 }
+
                 expectedSum += currNum;
                 this.input.add(input);
                 if (count < 2) {

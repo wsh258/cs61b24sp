@@ -21,7 +21,7 @@ public interface Deque61B<T> {
     void addLast(T x);
 
     /**
-     * Returns a List copy of the deque. Does not alter the deque.
+//     * Returns a List copy of the deque. Does not alter the deque.
      *
      * @return a new list copy of the deque.
      */
