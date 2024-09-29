@@ -97,12 +97,10 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
         if (index < 0 || index >= size) {
             return null;
         }
-        return getRecursive(index, sentinel.next); // Start recursion with the first node
+        return getRecursiveHelper(index, sentinel.next); // Start recursion with the first node
     }
 
-    private T getRecursive(int index, Node current) {
-
-
+    private T getRecursiveHelper(int index, Node current) {
         if (index == 0) {
             return current.item;  // Base case: return the item if index is 0
         }
