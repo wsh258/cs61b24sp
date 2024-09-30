@@ -105,7 +105,7 @@ public class LinkedListDeque61B<T> implements Deque61B<T>{
             return current.item;  // Base case: return the item if index is 0
         }
         else {
-            return getRecursive(index - 1, current.next);  // Recursive case: reduce index and move to next node
+            return getRecursiveHelper(index - 1, current.next);  // Recursive case: reduce index and move to next node
         }
     }
 }
