@@ -28,7 +28,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             if (current == null) {
                 return new Node(k, v);
             }
-
             int cmp = k.compareTo(current.k);
             if (cmp < 0) {
                 current.left = addRecursive(current.left, k, v);
