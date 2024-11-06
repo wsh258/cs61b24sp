@@ -1,5 +1,7 @@
 package ngrams;
 
+import edu.princeton.cs.algs4.In;
+
 import java.util.Collection;
 
 import static ngrams.TimeSeries.MAX_YEAR;
@@ -17,13 +19,13 @@ import static ngrams.TimeSeries.MIN_YEAR;
  */
 public class NGramMap {
 
-    // TODO: Add any necessary static/instance variables.
-
+    String WORDSFILENAME,COUNTSFILENAME;
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
      */
     public NGramMap(String wordsFilename, String countsFilename) {
-        // TODO: Fill in this constructor. See the "NGramMap Tips" section of the spec for help.
+        WORDSFILENAME = wordsFilename;
+        COUNTSFILENAME = countsFilename;
     }
 
     /**
@@ -34,8 +36,19 @@ public class NGramMap {
      * returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word, int startYear, int endYear) {
-        // TODO: Fill in this method.
-        return null;
+        In in = new In(WORDSFILENAME);
+        TimeSeries WordTimeSeries = new TimeSeries();
+
+        while (!in.isEmpty()){
+            String nextLine = in.readLine();
+            String[] splitLine = nextLine.split("\t");
+
+           boolean b = (Integer.parseInt(splitLine[1]) >= startYear) && (Integer.parseInt(splitLine[1]) <= endYear);
+            if(splitLine[0].equals(word)&&b){
+                WordTimeSeries.put(Integer.parseInt(splitLine[1]),Double.parseDouble(splitLine[2]));
+            }
+        }
+        return WordTimeSeries;
     }
 
     /**
@@ -45,16 +58,22 @@ public class NGramMap {
      * is not in the data files, returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word) {
-        // TODO: Fill in this method.
-        return null;
+        return countHistory(word,MIN_YEAR,MAX_YEAR);
     }
 
     /**
      * Returns a defensive copy of the total number of words recorded per year in all volumes.
      */
     public TimeSeries totalCountHistory() {
-        // TODO: Fill in this method.
-        return null;
+        In in = new In(COUNTSFILENAME);
+        TimeSeries WordTimeSeries = new TimeSeries();
+
+        while (!in.isEmpty()){
+            String nextLine = in.readLine();
+            String[] splitLine = nextLine.split(",");
+            WordTimeSeries.put(Integer.parseInt(splitLine[0]),Double.parseDouble(splitLine[1]));
+        }
+        return WordTimeSeries;
     }
 
     /**
@@ -63,8 +82,9 @@ public class NGramMap {
      * TimeSeries.
      */
     public TimeSeries weightHistory(String word, int startYear, int endYear) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries total = totalCountHistory();
+        TimeSeries wordCount = countHistory(word,startYear,endYear);
+        return wordCount.dividedBy(total);
     }
 
     /**
@@ -73,8 +93,9 @@ public class NGramMap {
      * TimeSeries.
      */
     public TimeSeries weightHistory(String word) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries total = totalCountHistory();
+        TimeSeries wordCount = countHistory(word,MIN_YEAR,MAX_YEAR);
+        return wordCount.dividedBy(total);
     }
 
     /**
@@ -84,8 +105,12 @@ public class NGramMap {
      */
     public TimeSeries summedWeightHistory(Collection<String> words,
                                           int startYear, int endYear) {
-        // TODO: Fill in this method.
-        return null;
+        TimeSeries weightHistory= new TimeSeries();
+        for(String k : words) {
+            TimeSeries a =  weightHistory(k, startYear,endYear);
+            weightHistory= weightHistory.plus(a);
+        }
+        return weightHistory;
     }
 
     /**
@@ -93,10 +118,6 @@ public class NGramMap {
      * exist in this time frame, ignore it rather than throwing an exception.
      */
     public TimeSeries summedWeightHistory(Collection<String> words) {
-        // TODO: Fill in this method.
-        return null;
+        return summedWeightHistory(words,MIN_YEAR,MAX_YEAR);
     }
-
-    // TODO: Add any private helper methods.
-    // TODO: Remove all TODO comments before submitting.
 }
