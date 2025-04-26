@@ -4,28 +4,30 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     // TODO: Add any necessary instance variables.
     private boolean[][] grid ;
-    private boolean sentinalFirst = true;
-    private boolean sentinalLast = true;
     WeightedQuickUnionUF unionGrid;
+    private int size; int top; int down;
     public Percolation(int N) {
+
         // TODO: Fill in this constructor. create N-by-N grid, with all sites initially blocked
         if (N < 0) {
             throw new IllegalArgumentException("Input must be non-negative!");
         }
+        size = N;
+        top = N * N;//sentinel head
+        down = top + 1;//sentinel last
         grid = new boolean[N][N];
-        unionGrid = new WeightedQuickUnionUF(N*N+2);
-        for (int i = 0;i < N;i++) {
-            unionGrid.union(i,N*N);
-        }
-        for (int i = 0;i < N;i++) {
-            unionGrid.union(i,N*N);
-        }
+        unionGrid = new WeightedQuickUnionUF(N * N + 2);
 
     }
 
     public void open(int row, int col) {
         // TODO: Fill in this method.   open the site (row, col) if it is not open already
         grid[row][col] = true;
+        if (row == 0) {
+            unionGrid.union(rowAndColToNum(row,col),top);
+        } else if (col == 0) {
+            unionGrid.union(rowAndColToNum(row,col),down);
+        }
     }
 
     public boolean isOpen(int row, int col) {
@@ -50,5 +52,20 @@ public class Percolation {
 
     // TODO: Add any useful helper methods (we highly recommend this!).
     // TODO: Remove all TODO comments before submitting.
-
+    // N*N是顶 再加一是底部
+    private int rowAndColToNum (int row,int col) {
+        return row * size + col;
+    }
+    private void unionUp (int row, int col){
+        unionGrid.union(rowAndColToNum(row,col),rowAndColToNum(row-1,col));
+    }
+    private void unionDown (int row, int col){
+        unionGrid.union(rowAndColToNum(row,col),rowAndColToNum(row+1,col));
+    }
+    private void unionLeft (int row, int col){
+        unionGrid.union(rowAndColToNum(row,col),rowAndColToNum(row,col-1));
+    }
+    private void unionRight (int row, int col){
+        unionGrid.union(rowAndColToNum(row,col),rowAndColToNum(row,col+1));
+    }
 }
