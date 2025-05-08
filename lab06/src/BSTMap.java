@@ -4,13 +4,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     int size = 0;
 
-    public class Node {
+    private class Node {
         K k;
         V v;
         Node left;
         Node right;
 
-        public Node(K k, V v) {
+        Node(K k, V v) {
             this.k = k;
             this.v = v;
         }
@@ -40,7 +40,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             return current;
         }
 
-        public Node find(K k) {
+        private Node find(K k) {
             Node current = root;
             return findRecursive(current, k);
         }
@@ -96,7 +96,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                 node = node.right;
             return node;
         }
-
     }
 
     private BSTree tree;
@@ -165,11 +164,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     @Override
 
     public Set<K> keySet() {
-//        List<K> list = new ArrayList<>();
-//        for(K key:this){
-//            list.addLast(key);
-//        }
-//        return new HashSet<>(list);
         if (tree.root == null) {
             return null;
         }
