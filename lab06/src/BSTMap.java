@@ -20,7 +20,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         private Node root;
 
         // 添加节点
-        public void add(K k, V v) {
+        private void add(K k, V v) {
             root = addRecursive(root, k, v);
         }
 
@@ -59,10 +59,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
             }
             return findRecursive(current, k);
         }
-        public void delete(K key) {
+        private void delete(K key) {
             root = deleteRecursive(root, key);
         }
-        public Node deleteRecursive(Node current,K key) {
+        private Node deleteRecursive(Node current,K key) {
             if (current == null) {
                 return null;
             }
