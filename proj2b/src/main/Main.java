@@ -2,6 +2,7 @@ package main;
 
 import browser.NgordnetServer;
 import org.slf4j.LoggerFactory;
+import wordnet.WordNet;
 
 public class Main {
     static {
@@ -17,7 +18,6 @@ public class Main {
         hns.register("history", new DummyHistoryHandler());
         hns.register("historytext", new DummyHistoryTextHandler());
         hns.register("hyponyms", new HyponymsHandler());
-
         System.out.println("Finished server startup! Visit http://localhost:4567/ngordnet.html");
     }
 }
