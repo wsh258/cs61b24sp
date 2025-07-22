@@ -11,13 +11,16 @@ public class HashGraph {
     private Map<Integer, List<Integer>> adj;
     // 如果是加权图，内层列表可以存储边对象或 Pair<String, Integer>
     // private Map<String, List<Edge>> adj;
+    private Map<Integer, List<Integer>> reverseGraph;
 
     public HashGraph() {
         adj = new HashMap<>();
+        reverseGraph = new HashMap<>();
     }
 
     public void addVertex(Integer vertex) {
         adj.putIfAbsent(vertex, null);
+        reverseGraph.putIfAbsent(vertex,null);
     }
 
     public void addEdge(Integer src, Integer destination) {
@@ -26,8 +29,9 @@ public class HashGraph {
         addVertex(destination);
 
         // 对于有向图
-        adj.get(src).add(destination);
 
+        adj.get(src).add(destination);
+        reverseGraph.get(destination).add(src);
         // 如果是无向图，还需要添加反向边
         // adj.get(dest).add(src);
     }
@@ -45,6 +49,12 @@ public class HashGraph {
             System.out.println("Vertex " + entry.getKey() + " is connected to: " + entry.getValue());
         }
     }
+
+    public List<Integer> getAncestors(Integer vertex) {
+        return reverseGraph.getOrDefault(vertex, new ArrayList<>());
+    }
+
+
 
 
 }
