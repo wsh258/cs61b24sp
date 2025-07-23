@@ -8,24 +8,25 @@ public class WordNet {
     private HashGraph hg;
     In sysIn;
     In hyponymsIn;
-    HashMap<Integer ,Set<String>> Num2WordMap;
-    HashMap<String ,Set<Integer>> Word2NumMap;
+    HashMap<Integer ,Set<String>> num2WordMap;
+    HashMap<String ,Set<Integer>> word2NumMap;
     public WordNet(String synsetsFileName, String hyponymsFileName) {
         this.hg = new HashGraph();
-        sysIn = new In("./data/wordnet/" + synsetsFileName);
-        hyponymsIn = new In("./data/wordnet/" + hyponymsFileName);
-        Num2WordMap = new HashMap<>();
-        Word2NumMap = new HashMap<>();
+        sysIn = new In(synsetsFileName);
+        hyponymsIn = new In(hyponymsFileName);
+        num2WordMap = new HashMap<>();
+        word2NumMap = new HashMap<>();
 
         while (!sysIn.isEmpty()) {
             String sysNextLine = sysIn.readLine();
+
             String[] sysSplitLine = sysNextLine.split(",");
 
-            Num2WordMap.putIfAbsent(Integer.parseInt(sysSplitLine[0]),new HashSet<>());
-            Num2WordMap.get(Integer.parseInt(sysSplitLine[0])).addAll(List.of(sysSplitLine[1].split(" ")));
+            num2WordMap.putIfAbsent(Integer.parseInt(sysSplitLine[0]),new HashSet<>());
+            num2WordMap.get(Integer.parseInt(sysSplitLine[0])).addAll(List.of(sysSplitLine[1].split(" ")));
             for (String word : List.of(sysSplitLine[1].split(" "))) {
-                Word2NumMap.putIfAbsent(word, new HashSet<>());
-                Word2NumMap.get(Integer.parseInt(sysSplitLine[0])).addAll(List.of(sysSplitLine[1].split(" ")));
+                word2NumMap.putIfAbsent(word, new HashSet<>());
+                word2NumMap.get(word).add(Integer.parseInt(sysSplitLine[0]));
             }
 
 
@@ -35,15 +36,47 @@ public class WordNet {
             String hypoNextLine = hyponymsIn.readLine();
             String[] hypoSplitLine = hypoNextLine.split(",");
             for (int i = 1; i < hypoSplitLine.length; i++) {
-                this.hg.addEdge(Integer.parseInt(hypoSplitLine[0]), Integer.parseInt(hypoSplitLine[i]));
+                hg.addEdge(Integer.parseInt(hypoSplitLine[0]), Integer.parseInt(hypoSplitLine[i]));
             }
         }
     }
-    private int word2num(String word) {
-        return Word2NumMap.keySet().;
+    private Set<Integer> word2num(String word) {
+        return word2NumMap.get(word);
     }
+
+    private Set<String> num2word(Integer num) {
+        return num2WordMap.get(num);
+    }
+
     public PriorityQueue<String> getHyponyms(String thisWord) {
+    Set<Integer> wordIds = word2num(thisWord);
+    Set<Integer> hyponymsID = new HashSet<>();
+    Set<String> hyponyms = new HashSet<>();
+
+    for (Integer id : wordIds) {
+        idDFSHelper(id, hyponymsID);
+    }
+
+    for (Integer id : hyponymsID) {
+        hyponyms.addAll(num2word(id));
+    }
+    return new PriorityQueue<>(hyponyms);
+    }
+
+    private void idDFSHelper(Integer StartId,Set<Integer>visitedAllHypo) {
+        if (visitedAllHypo.contains(StartId)) return;
+        visitedAllHypo.add(StartId);
+        for (int neighbor : hg.getNeighbors(StartId)) {
+            idDFSHelper(neighbor, visitedAllHypo);
+        }
+    }
+
+    public void printwordnet() {
+        for (Map.Entry<String, Set<Integer>> entry : word2NumMap.entrySet()) {
+            System.out.println(entry.getKey() + " => " + entry.getValue());
+        }
 
     }
+
 
 }
