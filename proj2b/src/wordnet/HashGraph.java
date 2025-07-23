@@ -1,6 +1,4 @@
 package wordnet;
-import edu.princeton.cs.algs4.In;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +17,8 @@ public class HashGraph {
     }
 
     public void addVertex(Integer vertex) {
-        adj.putIfAbsent(vertex, null);
-        reverseGraph.putIfAbsent(vertex,null);
+        adj.putIfAbsent(vertex, new ArrayList<>());
+        reverseGraph.putIfAbsent(vertex,new ArrayList<>());
     }
 
     public void addEdge(Integer src, Integer destination) {
@@ -53,9 +51,5 @@ public class HashGraph {
     public List<Integer> getAncestors(Integer vertex) {
         return reverseGraph.getOrDefault(vertex, new ArrayList<>());
     }
-
-
-
-
 }
 
