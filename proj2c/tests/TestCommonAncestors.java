@@ -17,8 +17,10 @@ public class TestCommonAncestors {
     public static final String LARGE_SYNSET_FILE = "data/wordnet/synsets.txt";
     public static final String LARGE_HYPONYM_FILE = "data/wordnet/hyponyms.txt";
 
-    /** This is an example from the spec for a common-ancestors query on the word "adjustment".
-     * You should add more tests for the other spec examples! */
+    /**
+     * This is an example from the spec for a common-ancestors query on the word "adjustment".
+     * You should add more tests for the other spec examples!
+     */
     @Test
     public void testSpecAdjustment() {
         NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
@@ -33,5 +35,17 @@ public class TestCommonAncestors {
 
     // TODO: Add more unit tests (including edge case tests) here.
 
+    @Test
+    public void testSpecAdjustmentAndCHange() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("adjustment", "change");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 2000, 2020, 0, NgordnetQueryType.ANCESTORS);
+        String actual = studentHandler.handle(nq);
+        String expected = "[alteration, event, happening, modification, natural_event, occurrence, occurrent]";
+        assertThat(actual).isEqualTo(expected);
+    }
     // TODO: Create similar unit test files for the k != 0 cases.
+
 }

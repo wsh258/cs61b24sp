@@ -52,11 +52,9 @@ public class WordNet {
     Set<Integer> wordIds = word2num(thisWord);
     Set<Integer> hyponymsID = new HashSet<>();
     Set<String> hyponyms = new HashSet<>();
-
     for (Integer id : wordIds) {
         idDFSHelper(id, hyponymsID);
     }
-
     for (Integer id : hyponymsID) {
         hyponyms.addAll(num2word(id));
     }
@@ -71,12 +69,33 @@ public class WordNet {
         }
     }
 
+    private void idDFSAncestorHelper(Integer StartId,Set<Integer>visitedAllHypo) {
+        if (visitedAllHypo.contains(StartId)) return;
+        visitedAllHypo.add(StartId);
+        for (int neighbor : hg.getAncestors(StartId)) {
+            idDFSAncestorHelper(neighbor, visitedAllHypo);
+        }
+    }
+
+    public PriorityQueue<String> getAncestors(String thisWord) {
+        Set<Integer> wordIds = word2num(thisWord);
+        Set<Integer> ancestorID = new HashSet<>();
+        Set<String> ancestors = new HashSet<>();
+        for (Integer id : wordIds) {
+            idDFSAncestorHelper(id, ancestorID);
+        }
+        for (Integer id : ancestorID) {
+            ancestors.addAll(num2word(id));
+        }
+        return new PriorityQueue<>(ancestors);
+    }
+    /*
     public void printwordnet() {
         for (Map.Entry<String, Set<Integer>> entry : word2NumMap.entrySet()) {
             System.out.println(entry.getKey() + " => " + entry.getValue());
         }
 
     }
-
+    */
 
 }
